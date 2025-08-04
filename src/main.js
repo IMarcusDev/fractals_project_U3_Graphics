@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { createFractalTree } from './fractalTree.js';
 import { generateKochCurve } from './kochCurve.js';
+import { generateSierpinskyTriangle } from './sierpinskyTriangle.js';
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xffffff);
@@ -24,7 +25,10 @@ scene.add(directionalLight);
 // const fractal = createFractalTree();
 
 // Curva de Koch
-const fractal = generateKochCurve(3);
+// const fractal = generateKochCurve(3);
+
+// Triángulo de Sierpinsky
+const fractal = generateSierpinskyTriangle(3);
 
 scene.add(fractal);
 
