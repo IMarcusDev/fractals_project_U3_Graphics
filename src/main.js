@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { createFractalTree } from './fractalTree.js';
+import { generateKochCurve } from './kochCurve.js';
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xffffff);
@@ -20,8 +21,12 @@ directionalLight.position.set(5, 10, 7);
 scene.add(directionalLight);
 
 // arbol fractal
-const tree = createFractalTree();
-scene.add(tree);
+// const fractal = createFractalTree();
+
+// Curva de Koch
+const fractal = generateKochCurve(3);
+
+scene.add(fractal);
 
 renderer.render(scene, camera);
 
