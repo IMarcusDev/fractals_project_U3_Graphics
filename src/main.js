@@ -4,6 +4,7 @@ import { generateKochCurve } from './kochCurve.js';
 import { generateSierpinskyTriangle } from './sierpinskyTriangle.js';
 
 const menu = document.getElementById('menu');
+const range = document.getElementById('iterationRange');
 let isOverMenu = false;
 
 // When mouse moves
@@ -56,8 +57,8 @@ scene.add(directionalLight);
 
 // Buttons
 document.getElementById('btnTree').addEventListener('click', () => renderFractal(createFractalTree()));
-document.getElementById('btnKoch').addEventListener('click', () => renderFractal(generateKochCurve(3)));
-document.getElementById('btnSierpinsky').addEventListener('click', () => renderFractal(generateSierpinskyTriangle(3)));
+document.getElementById('btnKoch').addEventListener('click', () => renderFractal(generateKochCurve(range.value)));
+document.getElementById('btnSierpinsky').addEventListener('click', () => renderFractal(generateSierpinskyTriangle(range.value)));
 
 renderer.render(scene, camera);
 
