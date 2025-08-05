@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { createFractalTree } from './fractalTree.js';
 import { generateKochCurve } from './kochCurve.js';
 import { generateSierpinskyTriangle } from './sierpinskyTriangle.js';
+import { generateJulia } from './julia.js';
+import { generateMadelbrot } from './Madelbrot.js';
 
 const menu = document.getElementById('menu');
 const range = document.getElementById('iterationRange');
@@ -36,8 +38,6 @@ function renderFractal(fractal) {
   scene.add(currentFractal);
   renderer.render(scene, camera);
 }
-import { generateJulia } from './julia.js';
-import { generateMadelbrot } from './Madelbrot.js';
 
 
 const scene = new THREE.Scene();
@@ -73,7 +73,7 @@ document.getElementById('btnSierpinsky').addEventListener('click', () => renderF
 
 
 //Julia
-const fractal = generateJulia()
+//const fractal = generateJulia()
 
 // Triángulo de Sierpinsky
 //const fractal = generateSierpinskyTriangle(3);
