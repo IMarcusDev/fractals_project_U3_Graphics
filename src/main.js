@@ -38,7 +38,7 @@ function renderFractal(fractal) {
 }
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x000000);
+scene.background = new THREE.Color(0xffffff);
 
 const camera = new THREE.PerspectiveCamera(
   75, window.innerWidth / window.innerHeight, 0.1, 1000
