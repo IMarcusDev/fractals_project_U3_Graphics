@@ -32,7 +32,7 @@ export function generateSierpinskyTriangle(steps) {
     triangles = newTriangles;
   }
 
-  const material = new THREE.LineBasicMaterial({ color: 0x0000ff });
+  const material = new THREE.LineBasicMaterial({ color: 0xffffff });
 
   // Add Triangules to Root
   for (const [a, b, c] of triangles) {

@@ -2,12 +2,46 @@ import * as THREE from 'three';
 import { createFractalTree } from './fractalTree.js';
 import { generateKochCurve } from './kochCurve.js';
 import { generateSierpinskyTriangle } from './sierpinskyTriangle.js';
+
+const menu = document.getElementById('menu');
+const range = document.getElementById('iterationRange');
+let isOverMenu = false;
+
+// When mouse moves
+document.addEventListener('mousemove', (e) => {
+  if (e.clientX < 50)
+    menu.classList.add('visible');
+  else if (!isOverMenu)
+    menu.classList.remove('visible');
+});
+
+// Detects if the mouse is inside the menu
+menu.addEventListener('mouseenter', () => {
+  isOverMenu = true;
+});
+
+// Detects if the mouse leaves the menu
+menu.addEventListener('mouseleave', () => {
+  isOverMenu = false;
+  menu.classList.remove('visible');
+});
+
+let currentFractal = null;
+
+function renderFractal(fractal) {
+  if (currentFractal)
+    scene.remove(currentFractal);
+
+  currentFractal = fractal;
+  scene.add(currentFractal);
+  renderer.render(scene, camera);
+}
 import { generateJulia } from './julia.js';
 import { generateMadelbrot } from './Madelbrot.js';
 
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xffffff);
+scene.background = new THREE.Color(0x000000);
 
 const camera = new THREE.PerspectiveCamera(
   75, window.innerWidth / window.innerHeight, 0.1, 1000
@@ -24,6 +58,10 @@ const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
 directionalLight.position.set(5, 10, 7);
 scene.add(directionalLight);
 
+// Buttons
+document.getElementById('btnTree').addEventListener('click', () => renderFractal(createFractalTree()));
+document.getElementById('btnKoch').addEventListener('click', () => renderFractal(generateKochCurve(range.value)));
+document.getElementById('btnSierpinsky').addEventListener('click', () => renderFractal(generateSierpinskyTriangle(range.value)));
 // arbol fractal
 //const fractal = createFractalTree();
 

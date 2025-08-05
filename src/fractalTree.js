@@ -35,6 +35,6 @@ export function createFractalTree() {
     }
   }
 
-  buildBranch(root, 2.5, 0, 10);
+  buildBranch(root, 2.5, 0, 5);
   return root;
 }
