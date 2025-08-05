@@ -4,7 +4,7 @@ import { generateKochCurve } from './kochCurve.js';
 import { generateSierpinskyTriangle } from './sierpinskyTriangle.js';
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xffffff);
+scene.background = new THREE.Color(0x000000);
 
 const camera = new THREE.PerspectiveCamera(
   75, window.innerWidth / window.innerHeight, 0.1, 1000

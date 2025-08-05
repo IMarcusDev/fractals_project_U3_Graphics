@@ -46,7 +46,7 @@ export function generateKochCurve(steps) {
   }
 
   const geometry = new THREE.BufferGeometry().setFromPoints(points);
-  const material = new THREE.LineBasicMaterial({ color: 0x0000ff });
+  const material = new THREE.LineBasicMaterial({ color: 0xffffff });
 
   root.add(new THREE.Line( geometry, material ));
 
