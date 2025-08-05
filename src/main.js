@@ -69,7 +69,7 @@ document.getElementById('btnSierpinsky').addEventListener('click', () => renderF
 //const fractal = generateKochCurve(3);
 
 // Madelbrot
-//const fractal = generateMadelbrot()
+const fractal = generateMadelbrot()
 
 
 //Julia
