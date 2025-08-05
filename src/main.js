@@ -25,6 +25,16 @@ menu.addEventListener('mouseleave', () => {
   menu.classList.remove('visible');
 });
 
+let currentFractal = null;
+
+function renderFractal(fractal) {
+  if (currentFractal)
+    scene.remove(currentFractal);
+
+  currentFractal = fractal;
+  scene.add(currentFractal);
+  renderer.render(scene, camera);
+}
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
@@ -44,16 +54,10 @@ const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
 directionalLight.position.set(5, 10, 7);
 scene.add(directionalLight);
 
-// arbol fractal
-// const fractal = createFractalTree();
-
-// Curva de Koch
-// const fractal = generateKochCurve(3);
-
-// Triángulo de Sierpinsky
-const fractal = generateSierpinskyTriangle(3);
-
-scene.add(fractal);
+// Buttons
+document.getElementById('btnTree').addEventListener('click', () => renderFractal(createFractalTree()));
+document.getElementById('btnKoch').addEventListener('click', () => renderFractal(generateKochCurve(3)));
+document.getElementById('btnSierpinsky').addEventListener('click', () => renderFractal(generateSierpinskyTriangle(3)));
 
 renderer.render(scene, camera);
 
