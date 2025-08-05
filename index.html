@@ -10,11 +10,14 @@
   <body>
     <div id="app"></div>
     <div id="menu">
-      <button id="btnTree" class="menuBtn">Árbol Fractal</button>
-      <button id="btnKoch" class="menuBtn">Curva de Koch</button>
-      <button id="btnSierpinsky" class="menuBtn">Triángulo de Sierpinsky</button>
-      <button id="btnMandelbrot" class="menuBtn">Conjunto de Mandelbrot</button>
-      <button id="btnJulia" class="menuBtn">Conjunto de Julia</button>
+      <div id="btnFractals">
+        <button id="btnTree" class="menuBtn">Árbol Fractal</button>
+        <button id="btnKoch" class="menuBtn">Curva de Koch</button>
+        <button id="btnSierpinsky" class="menuBtn">Triángulo de Sierpinsky</button>
+        <button id="btnMandelbrot" class="menuBtn">Conjunto de Mandelbrot</button>
+        <button id="btnJulia" class="menuBtn">Conjunto de Julia</button>
+      </div>
+      <input type="range" id="iterationRange" min="0" max="6" value="3" step="1" />
     </div>
     <script type="module" src="/src/main.js"></script>
   </body>
