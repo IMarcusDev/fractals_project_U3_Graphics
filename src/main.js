@@ -3,6 +3,29 @@ import { createFractalTree } from './fractalTree.js';
 import { generateKochCurve } from './kochCurve.js';
 import { generateSierpinskyTriangle } from './sierpinskyTriangle.js';
 
+const menu = document.getElementById('menu');
+let isOverMenu = false;
+
+// When mouse moves
+document.addEventListener('mousemove', (e) => {
+  if (e.clientX < 50)
+    menu.classList.add('visible');
+  else if (!isOverMenu)
+    menu.classList.remove('visible');
+});
+
+// Detects if the mouse is inside the menu
+menu.addEventListener('mouseenter', () => {
+  isOverMenu = true;
+});
+
+// Detects if the mouse leaves the menu
+menu.addEventListener('mouseleave', () => {
+  isOverMenu = false;
+  menu.classList.remove('visible');
+});
+
+
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
 
