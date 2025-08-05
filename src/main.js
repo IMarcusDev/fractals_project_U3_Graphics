@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { createFractalTree } from './fractalTree.js';
 import { generateKochCurve } from './kochCurve.js';
 import { generateSierpinskyTriangle } from './sierpinskyTriangle.js';
+import { generateJulia } from './julia.js';
+import { generateMadelbrot } from './Madelbrot.js';
 
 const menu = document.getElementById('menu');
 const range = document.getElementById('iterationRange');
@@ -37,6 +39,7 @@ function renderFractal(fractal) {
   renderer.render(scene, camera);
 }
 
+
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xffffff);
 
@@ -59,6 +62,23 @@ scene.add(directionalLight);
 document.getElementById('btnTree').addEventListener('click', () => renderFractal(createFractalTree()));
 document.getElementById('btnKoch').addEventListener('click', () => renderFractal(generateKochCurve(range.value)));
 document.getElementById('btnSierpinsky').addEventListener('click', () => renderFractal(generateSierpinskyTriangle(range.value)));
+// arbol fractal
+//const fractal = createFractalTree();
+
+// Curva de Koch
+//const fractal = generateKochCurve(3);
+
+// Madelbrot
+const fractal = generateMadelbrot()
+
+
+//Julia
+//const fractal = generateJulia()
+
+// Triángulo de Sierpinsky
+//const fractal = generateSierpinskyTriangle(3);
+
+scene.add(fractal);
 
 renderer.render(scene, camera);
 
