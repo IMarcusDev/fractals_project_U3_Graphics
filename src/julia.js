@@ -1,23 +1,21 @@
 import * as THREE from 'three';
 
-export function generateJulia(width = 512, height = 512, maxIterations = 100, cRe = -0.7, cIm = 0.27015) {
+export function generateJulia(resolution = 1000, maxIterations = 50, cRe = -0.8, cIm = 0.156) {
     const root = new THREE.Group();
-
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext('2d');
-    const imageData = ctx.createImageData(width, height);
-    const data = imageData.data;
 
     // Rango del plano complejo
     const xmin = -2.5, xmax = 1;
-    const ymin = -1.5, ymax = 3.5;
+    const ymin = -1.25, ymax = 1.25;
 
-    for (let px = 0; px < width; px++) {
-        for (let py = 0; py < height; py++) {
-            const zx0 = xmin + (px / width) * (xmax - xmin);
-            const zy0 = ymin + (py / height) * (ymax - ymin);
+
+    const geometry = new THREE.BufferGeometry();
+    const positions = [];
+    const colors = [];
+
+    for (let px = 0; px < resolution; px++) {
+        for (let py = 0; py < resolution; py++) {
+            const zx0 = xmin + (px / resolution) * (xmax - xmin);
+            const zy0 = ymin + (py / resolution) * (ymax - ymin);
 
             let zx = zx0;
             let zy = zy0;
@@ -30,26 +28,30 @@ export function generateJulia(width = 512, height = 512, maxIterations = 100, cR
                 iteration++;
             }
 
-            const pixelIndex = 4 * (py * width + px);
-            const color = iteration === maxIterations ? 0 : 255 - (iteration * 10 % 255);
+            if (iteration === maxIterations) {
 
-            data[pixelIndex + 100] = color;
-            data[pixelIndex + 1] = color;
-            data[pixelIndex + 2] = color;
-            data[pixelIndex + 3] = 255;
+                const worldX = (zx0 / (xmax - xmin)) * 20 - 5;
+                const worldY = (zy0 / (ymax - ymin)) * 20 - 5;
+                
+                positions.push(worldX, worldY, 0);
+                
+                colors.push(0, 0, 0);
+            }
         }
     }
 
-    ctx.putImageData(imageData, 0, 0);
-    
-    // Crear textura desde el canvas
-    const texture = new THREE.CanvasTexture(canvas);
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
 
-    // Crear plano y aplicarle la textura
-    const geometry = new THREE.PlaneGeometry(20, 30); // Ajusta escala visual
-    const material = new THREE.MeshBasicMaterial({ map: texture });
-    const plane = new THREE.Mesh(geometry, material);
-    root.add(plane);
+    const material = new THREE.PointsMaterial({
+        size: 0.04,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.9
+    });
+
+    const points = new THREE.Points(geometry, material);
+    root.add(points);
 
     return root;
 }

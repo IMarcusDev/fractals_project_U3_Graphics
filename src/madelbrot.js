@@ -1,25 +1,20 @@
 import * as THREE from 'three';
 
-export function generateMadelbrot(width = 1512, height = 1512, maxIterations = 100) {
+export function generateMandelbrot(resolution = 1000, maxIterations = 1000) {
     const root = new THREE.Group();
-
-    // Crear un canvas para dibujar el fractal y usarlo como textura
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext('2d');
-    const imageData = ctx.createImageData(width, height);
-    const data = imageData.data;
 
     // Rango del plano complejo
     const xmin = -2.5, xmax = 1;
-    const ymin = -1.5, ymax = 3.5;
+    const ymin = -1.25, ymax = 1.25;
+    
+    const geometry = new THREE.BufferGeometry();
+    const positions = [];
+    const colors = [];
 
-    // Generar el fractal píxel por píxel
-    for (let px = 0; px < width; px++) {
-        for (let py = 0; py < height; py++) {
-            const x0 = xmin + (px / width) * (xmax - xmin);
-            const y0 = ymin + (py / height) * (ymax - ymin);
+    for (let px = 0; px < resolution; px++) {
+        for (let py = 0; py < resolution; py++) {
+            const x0 = xmin + (px / resolution) * (xmax - xmin);
+            const y0 = ymin + (py / resolution) * (ymax - ymin);
             let x = 0, y = 0;
             let iteration = 0;
 
@@ -30,26 +25,29 @@ export function generateMadelbrot(width = 1512, height = 1512, maxIterations = 1
                 iteration++;
             }
 
-            const pixelIndex = 4 * (py * width + px);
-            const color = iteration === maxIterations ? 0 : 255 - (iteration * 10 % 255);
-
-            data[pixelIndex + 100] = color; 
-            data[pixelIndex + 1] = color; 
-            data[pixelIndex + 2] = color; 
-            data[pixelIndex + 3] = 255;   
+            if (iteration === maxIterations) {
+                const worldX = (x0 / (xmax - xmin)) * 20 - 5;
+                const worldY = (y0 / (ymax - ymin)) * 20 - 5;
+                
+                positions.push(worldX, worldY, 0);
+                
+                colors.push(0, 0, 0);
+            }
         }
     }
 
-    ctx.putImageData(imageData, 0, 0);
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
 
-    // Crear textura desde el canvas
-    const texture = new THREE.CanvasTexture(canvas);
+    const material = new THREE.PointsMaterial({
+        size: 0.05,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.8
+    });
 
-    // Crear plano y aplicarle la textura
-    const geometry = new THREE.PlaneGeometry(20, 30); // Ajusta escala visual
-    const material = new THREE.MeshBasicMaterial({ map: texture });
-    const plane = new THREE.Mesh(geometry, material);
+    const points = new THREE.Points(geometry, material);
+    root.add(points);
 
-    root.add(plane);
     return root;
 }
