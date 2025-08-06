@@ -7,6 +7,8 @@ import { generateMandelbrot } from './madelbrot.js';
 
 const menu = document.getElementById('menu');
 const range = document.getElementById('iterationRange');
+const title = document.getElementById('title');
+
 let isOverMenu = false;
 
 // When mouse moves
@@ -30,13 +32,15 @@ menu.addEventListener('mouseleave', () => {
 
 let currentFractal = null;
 
-function renderFractal(fractal) {
+function renderFractal(fractal, name) {
   if (currentFractal)
     scene.remove(currentFractal);
 
   currentFractal = fractal;
   scene.add(currentFractal);
   renderer.render(scene, camera);
+
+  title.innerText = name;
 }
 
 const scene = new THREE.Scene();
@@ -58,9 +62,9 @@ directionalLight.position.set(5, 10, 7);
 scene.add(directionalLight);
 
 // Buttons
-document.getElementById('btnTree').addEventListener('click', () => renderFractal(createFractalTree()));
-document.getElementById('btnKoch').addEventListener('click', () => renderFractal(generateKochCurve(range.value)));
-document.getElementById('btnSierpinsky').addEventListener('click', () => renderFractal(generateSierpinskyTriangle(range.value)));
+document.getElementById('btnTree').addEventListener('click', () => renderFractal(createFractalTree(), 'Árbol Fractal'));
+document.getElementById('btnKoch').addEventListener('click', () => renderFractal(generateKochCurve(range.value), 'Curva de Koch'));
+document.getElementById('btnSierpinsky').addEventListener('click', () => renderFractal(generateSierpinskyTriangle(range.value), 'Triángulo de Sierpinsky'));
 
 
 // arbol fractal

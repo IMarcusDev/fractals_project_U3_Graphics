@@ -16,6 +16,8 @@ body {
   box-sizing: border-box;
   transition: left 0.5s cubic-bezier(0.25, 1, 0.5, 1);
   padding: 20px 15px;
+  /* Always at top */
+  z-index: 1;
 }
 
 #menu.visible {
@@ -41,4 +43,15 @@ body {
 
 .menuBtn:active {
   background-color: rgba(255, 255, 255, 0.2);
+}
+
+#title-container {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+#title {
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
