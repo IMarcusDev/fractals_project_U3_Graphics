@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-export function createFractalTree() {
+export function createFractalTree(depth) {
   const root = new THREE.Group();
 
   function buildBranch(parent, length, depth, maxDepth) {
@@ -35,6 +35,6 @@ export function createFractalTree() {
     }
   }
 
-  buildBranch(root, 2.5, 0, 5);
+  buildBranch(root, 2.5, 0, depth);
   return root;
 }

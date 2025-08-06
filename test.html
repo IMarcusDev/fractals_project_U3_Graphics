@@ -90,7 +90,7 @@
 
         // Configuración de Three.js
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x001122);
+        scene.background = new THREE.Color(0xffffff);
 
         const camera = new THREE.PerspectiveCamera(
             75, 
@@ -134,7 +134,7 @@
         document.getElementById('btnMandelbrot').addEventListener('click', () => {
             console.log('Generando Mandelbrot...');
             try {
-                const mandelbrot = generateMandelbrot(1000, 1000); // menos resolución, menos iteraciones
+                const mandelbrot = generateMandelbrot(2000, 1000); // menos resolución, menos iteraciones
                 renderFractal(mandelbrot);
             } catch (error) {
                 console.error('Error generando Mandelbrot:', error);
@@ -174,7 +174,7 @@
         document.getElementById('btnSierpinsky').addEventListener('click', () => {
             console.log('Generando Triángulo de Sierpinsky...');
             try {
-                const sierpinsky = generateSierpinskyTriangle(5); // 5 iteraciones
+                const sierpinsky = generateSierpinskyTriangle(10); // 5 iteraciones
                 renderFractal(sierpinsky);
             } catch (error) {
                 console.error('Error generando Triángulo de Sierpinsky:', error);

@@ -43,6 +43,11 @@ function renderFractal(fractal, name) {
   title.innerText = name;
 }
 
+let angle = 0;
+const radius = 8; // Distancia de la cámara al centro
+
+
+
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xffffff);
 
@@ -62,11 +67,11 @@ directionalLight.position.set(5, 10, 7);
 scene.add(directionalLight);
 
 // Buttons
-document.getElementById('btnTree').addEventListener('click', () => renderFractal(createFractalTree(), 'Árbol Fractal'));
-document.getElementById('btnKoch').addEventListener('click', () => renderFractal(generateKochCurve(range.value), 'Curva de Koch'));
-document.getElementById('btnSierpinsky').addEventListener('click', () => renderFractal(generateSierpinskyTriangle(range.value), 'Triángulo de Sierpinsky'));
-
-
+document.getElementById('btnTree').addEventListener('click', () => renderFractal(createFractalTree(range.value), 'Árbol fractal'));
+document.getElementById('btnKoch').addEventListener('click', () => renderFractal(generateKochCurve(range.value)));
+document.getElementById('btnSierpinsky').addEventListener('click', () => renderFractal(generateSierpinskyTriangle(range.value)));
+document.getElementById('btnMandelbrot').addEventListener('click', () => renderFractal(generateMandelbrot()));
+document.getElementById('btnJulia').addEventListener('click', () => renderFractal(generateJulia(100)));
 // arbol fractal
 //const fractal = createFractalTree();
 
@@ -82,9 +87,19 @@ document.getElementById('btnSierpinsky').addEventListener('click', () => renderF
 // Triángulo de Sierpinsky
 //const fractal = generateSierpinskyTriangle(3);
 
-// scene.add(fractal);  // COMENTADO - causaba error
+function animate() {
+  requestAnimationFrame(animate);
 
-// renderer.render(scene, camera);  // COMENTADO - se renderiza en renderFractal()
+  // Actualiza la posición de la cámara en un círculo (alrededor del eje Y)
+  angle += 0.005;
+  camera.position.x = Math.sin(angle) * radius;
+  camera.position.z = Math.cos(angle) * radius;
+
+  camera.lookAt(0, 0, 0); // Mira al centro de la escena
+  
+  renderer.render(scene, camera);
+}
+animate();
 
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
