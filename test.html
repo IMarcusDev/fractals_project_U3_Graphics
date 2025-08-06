@@ -58,6 +58,9 @@
         <h3>Fractales Test</h3>
         <button id="btnMandelbrot">Conjunto de Mandelbrot</button>
         <button id="btnJulia">Conjunto de Julia</button>
+        <button id="btnTree">Árbol Fractal</button>
+        <button id="btnKoch">Curva de Koch</button>
+        <button id="btnSierpinsky">Triángulo de Sierpinsky</button>
         <button id="btnClear">Limpiar Escena</button>
         
         <div id="info">
@@ -81,6 +84,9 @@
         // Importar funciones de fractales (ajusta las rutas según tu estructura)
         import { generateMandelbrot } from './src/madelbrot.js';
         import { generateJulia } from './src/julia.js';
+        import { createFractalTree } from './src/fractalTree.js';
+        import { generateKochCurve } from './src/kochCurve.js';
+        import { generateSierpinskyTriangle } from './src/sierpinskyTriangle.js';
 
         // Configuración de Three.js
         const scene = new THREE.Scene();
@@ -142,6 +148,36 @@
                 renderFractal(julia);
             } catch (error) {
                 console.error('Error generando Julia:', error);
+            }
+        });
+
+        document.getElementById('btnTree').addEventListener('click', () => {
+            console.log('Generando Árbol Fractal...');
+            try {
+                const tree = createFractalTree();
+                renderFractal(tree);
+            } catch (error) {
+                console.error('Error generando Árbol Fractal:', error);
+            }
+        });
+
+        document.getElementById('btnKoch').addEventListener('click', () => {
+            console.log('Generando Curva de Koch...');
+            try {
+                const koch = generateKochCurve(4); // 4 iteraciones
+                renderFractal(koch);
+            } catch (error) {
+                console.error('Error generando Curva de Koch:', error);
+            }
+        });
+
+        document.getElementById('btnSierpinsky').addEventListener('click', () => {
+            console.log('Generando Triángulo de Sierpinsky...');
+            try {
+                const sierpinsky = generateSierpinskyTriangle(5); // 5 iteraciones
+                renderFractal(sierpinsky);
+            } catch (error) {
+                console.error('Error generando Triángulo de Sierpinsky:', error);
             }
         });
 
