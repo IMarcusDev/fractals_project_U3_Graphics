@@ -49,6 +49,8 @@ export function generateKochCurve(steps) {
   const material = new THREE.LineBasicMaterial({ color: 0x000000 });
 
   root.add(new THREE.Line( geometry, material ));
+  document.getElementById('mandelbrot-style').style.display = 'none';
+  document.getElementById('julia-style').style.display = "none"
 
   return root;
 }

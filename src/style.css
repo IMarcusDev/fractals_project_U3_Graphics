@@ -45,6 +45,17 @@ body {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
+#mandelbrot-style {
+  margin-top: 2vw;
+  display: none;
+}
+
+#julia-style{
+  margin-top: 2vw;
+  display: none;
+}
+
+
 #title-container {
   position: absolute;
   width: 100%;
@@ -54,4 +65,33 @@ body {
 
 #title {
   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  text-align: center;
+  margin-right: 1vw;
 }
+
+#controls{
+  display: flex;
+  float: right;
+  margin-right: 1vw;
+}
+
+.button-style{
+  display: block;
+  width: 100px;
+  margin: 10px 0;
+  padding: 12px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;  
+  margin: 1px;
+}
+
+
+.button-style:hover {
+  background: #9faea0;
+}
+        

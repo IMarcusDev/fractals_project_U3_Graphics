@@ -20,8 +20,37 @@
       <input type="range" id="iterationRange" min="0" max="10" value="3" step="1" />
     </div>
     <div id="title-container">
-      <h2 id="title">Desplázate hacia la izquierda para seleccionar un fractal</h2>
+      <div>
+        <h2 id="title">Desplázate hacia la izquierda para seleccionar un fractal</h2>
+        <div id="mandelbrot-style">
+          <canvas id="mandelbrot" width="1525" height="600"></canvas>
+          <div id="controls">
+            <button class="button-style" onclick="zoom(1.5)">Zoom +</button>
+            <button class="button-style" onclick="zoom(0.67)">Zoom -</button>
+            <button class="button-style" onclick="move('left')">←</button>
+            <button class="button-style" onclick="move('right')">→</button>
+            <button class="button-style" onclick="move('up')">↑</button>
+            <button class="button-style" onclick="move('down')">↓</button>
+          </div>
+        </div>
+        <div id="julia-style">
+          <canvas id="julia" width="1525" height="600"></canvas>
+          <div id="controls">
+            <button class="button-style" onclick="zoomJulia(1.5)">Zoom +</button>
+            <button class="button-style" onclick="zoomJulia(0.67)">Zoom -</button>
+            <button class="button-style" onclick="moveJulia('left')">←</button>
+            <button class="button-style" onclick="moveJulia('right')">→</button>
+            <button class="button-style" onclick="moveJulia('up')">↑</button>
+            <button class="button-style" onclick="moveJulia('down')">↓</button>
+          </div>
+        </div>
+      </div>
+      </div>
+
     </div>
     <script type="module" src="/src/main.js"></script>
+    <script src="src/mandelbrot.js"></script>
+    <script src="src/julia.js"></script>
+
   </body>
 </html>

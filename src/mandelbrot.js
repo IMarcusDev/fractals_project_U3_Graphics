@@ -1,25 +1,21 @@
-let canvas = document.getElementById('julia');
+let canvas = document.getElementById('mandelbrot');
 let ctx = canvas.getContext('2d');
 let width = canvas.width;
 let height = canvas.height;
 
 // Parámetros iniciales
-let centerX = 0;
+let centerX = -0.5;
 let centerY = 0;
 let scale = 3;
-let maxIter = 150; //aqui se cambia el numero de interaciones para que se vea se expanda o disminuya su forma 
+let maxIter = 100;
 
-// Parámetro c para Julia
-let cRe = -0.7;
-let cIm = 0.27015;
-
-function drawJulia() {
+function drawMandelbrot() {
   let img = ctx.createImageData(width, height);
   for (let x = 0; x < width; x++) {
     for (let y = 0; y < height; y++) {
       let zx = centerX + (x - width/2) * scale / width;
       let zy = centerY + (y - height/2) * scale / width;
-      let i = julia(zx, zy);
+      let i = mandelbrot(zx, zy);
       let color = i === maxIter ? 0 : 255 - Math.floor(255 * i / maxIter);
       let idx = (y * width + x) * 4;
       img.data[idx] = color;
@@ -31,62 +27,64 @@ function drawJulia() {
   ctx.putImageData(img, 0, 0);
 }
 
-function julia(zx, zy) {
-  let iter = 0;
+function mandelbrot(cx, cy) {
+  let zx = 0, zy = 0, iter = 0;
   while (zx*zx + zy*zy < 4 && iter < maxIter) {
-    let xt = zx*zx - zy*zy + cRe;
-    zy = 2*zx*zy + cIm;
+    let xt = zx*zx - zy*zy + cx;
+    zy = 2*zx*zy + cy;
     zx = xt;
     iter++;
   }
   return iter;
 }
 
-drawJulia();
+drawMandelbrot();
 
 // Interacción
-function zoomJulia(factor) {
+function zoom(factor) {
   scale *= 1/factor;
-  drawJulia();
+  drawMandelbrot();
 }
 
-function moveJulia(dir) {
+function move(dir) {
   let step = scale * 0.2;
   if (dir === 'left') centerX -= step;
   if (dir === 'right') centerX += step;
   if (dir === 'up') centerY -= step;
   if (dir === 'down') centerY += step;
-  drawJulia();
+  drawMandelbrot();
 }
 
-export function generateJulia(){
-  document.getElementById('mandelbrot-style').style.display = 'none';
-  document.getElementById('julia-style').style.display = "block"
+export function generateMandelbrot(){
+  document.getElementById('mandelbrot-style').style.display = 'block';
+  document.getElementById('julia-style').style.display = "none"
+
 }
 
-window.zoomJulia = zoomJulia;
-window.moveJulia = moveJulia;
+window.zoom = zoom;
+window.move = move;
 
 document.addEventListener('keydown', function(e) {
   switch(e.key) {
     case 'ArrowLeft':
-      moveJulia('left');
+      move('left');
       break;
     case 'ArrowRight':
-      moveJulia('right');
+      move('right');
       break;
     case 'ArrowUp':
-      moveJulia('up');
+      move('up');
       break;
     case 'ArrowDown':
-      moveJulia('down');
+      move('down');
       break;
     case '+':
     case '=': // Para la tecla "+" en algunos teclados
-      zoomJulia(1.5);
+      zoom(1.5);
       break;
     case '-':
-      zoomJulia(0.67);
+      zoom(0.67);
       break;
   }
 });
+

@@ -42,6 +42,7 @@ export function generateSierpinskyTriangle(steps) {
     const line = new THREE.Line(geometry, material);
     root.add(line);
   }
-
+  document.getElementById('mandelbrot-style').style.display = 'none';
+  document.getElementById('julia-style').style.display = "none"
   return root;
 }

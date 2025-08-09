@@ -3,7 +3,7 @@ import { createFractalTree } from './fractalTree.js';
 import { generateKochCurve } from './kochCurve.js';
 import { generateSierpinskyTriangle } from './sierpinskyTriangle.js';
 import { generateJulia } from './julia.js';
-import { generateMandelbrot } from './madelbrot.js';
+import { generateMandelbrot} from './mandelbrot.js'
 
 const menu = document.getElementById('menu');
 const range = document.getElementById('iterationRange');
@@ -70,8 +70,8 @@ scene.add(directionalLight);
 document.getElementById('btnTree').addEventListener('click', () => renderFractal(createFractalTree(range.value), 'Árbol fractal'));
 document.getElementById('btnKoch').addEventListener('click', () => renderFractal(generateKochCurve(range.value)));
 document.getElementById('btnSierpinsky').addEventListener('click', () => renderFractal(generateSierpinskyTriangle(range.value)));
-document.getElementById('btnMandelbrot').addEventListener('click', () => renderFractal(generateMandelbrot()));
-document.getElementById('btnJulia').addEventListener('click', () => renderFractal(generateJulia(100)));
+document.getElementById('btnMandelbrot').addEventListener('click', () => renderFractal(generateMandelbrot(), 'Mandelbrot'));
+document.getElementById('btnJulia').addEventListener('click', () => renderFractal(generateJulia(), 'Julia'));
 // arbol fractal
 //const fractal = createFractalTree();
 
@@ -100,6 +100,7 @@ function animate() {
   renderer.render(scene, camera);
 }
 animate();
+
 
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;

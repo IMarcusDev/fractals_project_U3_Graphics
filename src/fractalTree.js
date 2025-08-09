@@ -36,5 +36,7 @@ export function createFractalTree(depth) {
   }
 
   buildBranch(root, 2.5, 0, depth);
+  document.getElementById('mandelbrot-style').style.display = 'none';
+  document.getElementById('julia-style').style.display = "none"
   return root;
 }

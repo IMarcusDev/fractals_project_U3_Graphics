@@ -51,24 +51,66 @@
             font-size: 12px;
             color: #ccc;
         }
+
+        /* Nuevos estilos para los controles interactivos */
+        label {
+            display: block;
+            margin: 10px 0;
+            color: white;
+        }
+
+        input, select {
+            margin-top: 5px;
+            padding: 8px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
+    <!-- Controles -->
     <div id="controls">
         <h3>Fractales Test</h3>
-        <button id="btnMandelbrot">Conjunto de Mandelbrot</button>
-        <button id="btnJulia">Conjunto de Julia</button>
-        <button id="btnTree">Árbol Fractal</button>
-        <button id="btnKoch">Curva de Koch</button>
-        <button id="btnSierpinsky">Triángulo de Sierpinsky</button>
+        <label>Tipo de fractal:
+            <select id="fractalType">
+                <option value="mandelbrot">Mandelbrot</option>
+                <!-- <option value="otro">Otro</option> -->
+            </select>
+        </label>
+        <label>Iteraciones:
+            <input type="number" id="iterations" value="1000" min="100" max="5000" step="100">
+        </label>
+        <label>Zoom:
+            <input type="range" id="zoom" min="1" max="10" step="0.1" value="1">
+        </label>
+        <label>Rotación:
+            <input type="range" id="rotation" min="0" max="6.28" step="0.01" value="0">
+        </label>
+        <label>Pan X:
+            <input type="range" id="panX" min="-2" max="2" step="0.01" value="0">
+        </label>
+        <label>Pan Y:
+            <input type="range" id="panY" min="-2" max="2" step="0.01" value="0">
+        </label>
         <button id="btnClear">Limpiar Escena</button>
         
         <div id="info">
-            <p>Usa los botones para probar los fractales</p>
+            <p>Usa los controles para ajustar el fractal</p>
             <p>Mouse: Rotar cámara</p>
             <p>Scroll: Zoom</p>
         </div>
     </div>
+    <div id="container"></div>
 
     <script type="importmap">
         {
@@ -80,14 +122,8 @@
     <script type="module">
         import * as THREE from 'https://unpkg.com/three@0.179.1/build/three.module.js';
         import { OrbitControls } from 'https://unpkg.com/three@0.179.1/examples/jsm/controls/OrbitControls.js';
+        import { FractalViewer } from './src/madelbrot.js';
         
-        // Importar funciones de fractales (ajusta las rutas según tu estructura)
-        import { generateMandelbrot } from './src/madelbrot.js';
-        import { generateJulia } from './src/julia.js';
-        import { createFractalTree } from './src/fractalTree.js';
-        import { generateKochCurve } from './src/kochCurve.js';
-        import { generateSierpinskyTriangle } from './src/sierpinskyTriangle.js';
-
         // Configuración de Three.js
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0xffffff);
@@ -102,7 +138,7 @@
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
+        document.getElementById('container').appendChild(renderer.domElement);
 
         // Controles de cámara
         const controls = new OrbitControls(camera, renderer.domElement);
@@ -117,76 +153,36 @@
         directionalLight.position.set(5, 10, 7);
         scene.add(directionalLight);
 
-        let currentFractal = null;
+        // FractalViewer
+        let fractal = new FractalViewer();
+        scene.add(fractal.getObject3D());
 
-        // Función para renderizar fractales
-        function renderFractal(fractal) {
-            if (currentFractal) {
-                scene.remove(currentFractal);
-            }
-            
-            currentFractal = fractal;
-            scene.add(currentFractal);
-            console.log('Fractal agregado a la escena');
+        // Actualiza fractal en la escena
+        function updateFractal() {
+            scene.remove(fractal.getObject3D());
+            fractal = new FractalViewer({
+                type: document.getElementById('fractalType').value,
+                maxIterations: parseInt(document.getElementById('iterations').value),
+                zoom: parseFloat(document.getElementById('zoom').value),
+                offsetX: parseFloat(document.getElementById('panX').value),
+                offsetY: parseFloat(document.getElementById('panY').value),
+                rotation: parseFloat(document.getElementById('rotation').value)
+            });
+            scene.add(fractal.getObject3D());
         }
 
-        // Event listeners para los botones
-        document.getElementById('btnMandelbrot').addEventListener('click', () => {
-            console.log('Generando Mandelbrot...');
-            try {
-                const mandelbrot = generateMandelbrot(2000, 1000); // menos resolución, menos iteraciones
-                renderFractal(mandelbrot);
-            } catch (error) {
-                console.error('Error generando Mandelbrot:', error);
-            }
-        });
-
-        document.getElementById('btnJulia').addEventListener('click', () => {
-            console.log('Generando Julia...');
-            try {
-                const julia = generateJulia(1000, 50, -0.8, 0.156); // menos resolución, menos iteraciones
-                renderFractal(julia);
-            } catch (error) {
-                console.error('Error generando Julia:', error);
-            }
-        });
-
-        document.getElementById('btnTree').addEventListener('click', () => {
-            console.log('Generando Árbol Fractal...');
-            try {
-                const tree = createFractalTree();
-                renderFractal(tree);
-            } catch (error) {
-                console.error('Error generando Árbol Fractal:', error);
-            }
-        });
-
-        document.getElementById('btnKoch').addEventListener('click', () => {
-            console.log('Generando Curva de Koch...');
-            try {
-                const koch = generateKochCurve(4); // 4 iteraciones
-                renderFractal(koch);
-            } catch (error) {
-                console.error('Error generando Curva de Koch:', error);
-            }
-        });
-
-        document.getElementById('btnSierpinsky').addEventListener('click', () => {
-            console.log('Generando Triángulo de Sierpinsky...');
-            try {
-                const sierpinsky = generateSierpinskyTriangle(10); // 5 iteraciones
-                renderFractal(sierpinsky);
-            } catch (error) {
-                console.error('Error generando Triángulo de Sierpinsky:', error);
-            }
-        });
+        // Eventos de los controles
+        document.getElementById('fractalType').addEventListener('change', updateFractal);
+        document.getElementById('iterations').addEventListener('input', updateFractal);
+        document.getElementById('zoom').addEventListener('input', updateFractal);
+        document.getElementById('rotation').addEventListener('input', updateFractal);
+        document.getElementById('panX').addEventListener('input', updateFractal);
+        document.getElementById('panY').addEventListener('input', updateFractal);
 
         document.getElementById('btnClear').addEventListener('click', () => {
-            if (currentFractal) {
-                scene.remove(currentFractal);
-                currentFractal = null;
-                console.log('Escena limpiada');
-            }
+            scene.remove(fractal.getObject3D());
+            fractal = new FractalViewer();
+            scene.add(fractal.getObject3D());
         });
 
         // Loop de animación
@@ -206,6 +202,10 @@
         // Iniciar animación
         animate();
         
+        console.log('Aplicación de test cargada. Usa los botones para probar los fractales.');
+    </script>
+</body>
+</html>
         console.log('Aplicación de test cargada. Usa los botones para probar los fractales.');
     </script>
 </body>
