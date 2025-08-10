@@ -1,56 +1,137 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./src/style.css">
-    <title>Proyecto Fractales</title>
+      <meta charset="UTF-8" />
+      <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="stylesheet" href="./src/style.css">
+      <title>Proyecto Fractales</title>
   </head>
   <body>
-    <div id="app"></div>
-    <div id="menu">
-      <div id="btnFractals">
-        <button id="btnTree" class="menuBtn">Árbol Fractal</button>
-        <button id="btnKoch" class="menuBtn">Curva de Koch</button>
-        <button id="btnSierpinsky" class="menuBtn">Triángulo de Sierpinsky</button>
-        <button id="btnMandelbrot" class="menuBtn">Conjunto de Mandelbrot</button>
-        <button id="btnJulia" class="menuBtn">Conjunto de Julia</button>
-      </div>
-      <input type="range" id="iterationRange" min="0" max="10" value="3" step="1" />
-    </div>
-    <div id="title-container">
-      <div>
-        <h2 id="title">Desplázate hacia la izquierda para seleccionar un fractal</h2>
-        <div id="mandelbrot-style">
-          <canvas id="mandelbrot" width="1525" height="600"></canvas>
-          <div id="controls">
-            <button class="button-style" onclick="zoom(1.5)">Zoom +</button>
-            <button class="button-style" onclick="zoom(0.67)">Zoom -</button>
-            <button class="button-style" onclick="move('left')">←</button>
-            <button class="button-style" onclick="move('right')">→</button>
-            <button class="button-style" onclick="move('up')">↑</button>
-            <button class="button-style" onclick="move('down')">↓</button>
+    <div id="app">
+      <div id="menu">
+          <div class="menu-section">
+              <h3>Seleccionar Fractal</h3>
+              <div id="btnFractals">
+                  <button id="btnTree" class="menuBtn" data-fractal="tree">Árbol Fractal</button>
+                  <button id="btnKoch" class="menuBtn" data-fractal="koch">Curva de Koch</button>
+                  <button id="btnSierpinsky" class="menuBtn" data-fractal="sierpinsky">Triángulo de Sierpinski</button>
+                  <button id="btnMandelbrot" class="menuBtn" data-fractal="mandelbrot">Conjunto de Mandelbrot</button>
+                  <button id="btnJulia" class="menuBtn" data-fractal="julia">Conjunto de Julia</button>
+              </div>
           </div>
-        </div>
-        <div id="julia-style">
-          <canvas id="julia" width="1525" height="600"></canvas>
-          <div id="controls">
-            <button class="button-style" onclick="zoomJulia(1.5)">Zoom +</button>
-            <button class="button-style" onclick="zoomJulia(0.67)">Zoom -</button>
-            <button class="button-style" onclick="moveJulia('left')">←</button>
-            <button class="button-style" onclick="moveJulia('right')">→</button>
-            <button class="button-style" onclick="moveJulia('up')">↑</button>
-            <button class="button-style" onclick="moveJulia('down')">↓</button>
+
+          <div class="menu-section">
+              <h3>Parámetros</h3>
+              <div class="control-group">
+                  <label for="iterationRange">Iteraciones/Profundidad: <span class="range-value" id="rangeValue">3</span></label>
+                  <input type="range" id="iterationRange" min="1" max="12" value="3" step="1" />
+              </div>
           </div>
-        </div>
-      </div>
+
+          <div class="menu-section">
+              <h3>Transformaciones</h3>
+              <div class="transform-section">
+                  <div class="transform-group">
+                      <label>Rotación</label>
+                      <div class="control-group">
+                          <input type="range" id="rotationRange" min="0" max="360" value="0" step="15">
+                          <span class="range-value" id="rotationValue">0°</span>
+                      </div>
+                      <div class="transform-controls">
+                          <button class="btn-transform" onclick="rotateLeft()">↶ Izquierda</button>
+                          <button class="btn-transform" onclick="rotateRight()">↷ Derecha</button>
+                      </div>
+                  </div>
+                  
+                  <div class="transform-group">
+                      <label>Escala (Zoom)</label>
+                      <div class="control-group">
+                          <input type="range" id="scaleRange" min="0.5" max="50" value="1" step="0.1">
+                          <span class="range-value" id="scaleValue">1.0x</span>
+                      </div>
+                      <div class="transform-controls">
+                          <button class="btn-transform" onclick="zoomIn()">🔍+ Acercar</button>
+                          <button class="btn-transform" onclick="zoomOut()">🔍- Alejar</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="menu-section">
+              <h3>Acciones</h3>
+
+              <button class="btn-save" onclick="saveCurrentFractal()">
+                  Guardar Captura
+                  <div class="control-tooltip">Guardar imagen en resolución actual</div>
+              </button>
+
+              <button class="btn-reset" onclick="resetTransformations()">
+                  Reiniciar Vista
+                  <div class="control-tooltip">Resetear transformaciones y centrar vista</div>
+              </button>
+              
+              <button class="btn-transform" style="width: 100%; margin-top: 10px;" onclick="randomize()">
+                  Aleatorio
+                  <div class="control-tooltip">Valores aleatorios</div>
+              </button>
+          </div>
+
+          <div class="info-panel">
+            <div class="shortcuts">
+              <strong>🎮 Controles de Navegación:</strong>
+              <ul>
+                <li><strong>Arrastrar:</strong> Rotar alrededor del objeto<br></li>
+                <li><strong>Ctrl + Arrastrar:</strong> Mover vista libremente<br></li>
+                <li><strong>Scroll:</strong> Zoom orbital<br></li>
+                <li><strong>Ctrl + Scroll:</strong> Mover adelante/atrás<br><br></li>
+              </ul>
+              <strong>⌨️ Atajos de Teclado:</strong>
+              <ul>
+                <li><strong>Home:</strong> Centrar vista<br></li>
+                <li><strong>1/3/7:</strong> Vistas predefinidas<br></li>
+                <li><strong>Flechas:</strong> Mover fractales 2D<br></li>
+                <li><strong>+/- :</strong> Zoom<br></li>
+                <li><strong>R:</strong> Rotar<br></li>
+                <li><strong>Espacio:</strong> Regenerar<br></li>
+                <li><strong>S:</strong> Guardar<br></li>
+                <li><strong>T:</strong> Reset completo<br><br></li>
+              </ul>
+            </div>
+          </div>
       </div>
 
-    </div>
-    <script type="module" src="/src/main.js"></script>
-    <script src="src/mandelbrot.js"></script>
-    <script src="src/julia.js"></script>
+      <div id="title-container">
+          <h2 id="title">Desplázate hacia la izquierda para seleccionar un fractal</h2>
+      </div>
+
+      <div id="mandelbrot-style">
+          <canvas id="mandelbrot" width="1525" height="600"></canvas>
+          <div id="controls">
+              <button class="button-style" onclick="zoom(1.5)" title="Zoom In">🔍+</button>
+              <button class="button-style" onclick="zoom(0.67)" title="Zoom Out">🔍-</button>
+              <button class="button-style" onclick="move('left')" title="Mover Izquierda">←</button>
+              <button class="button-style" onclick="move('right')" title="Mover Derecha">→</button>
+              <button class="button-style" onclick="move('up')" title="Mover Arriba">↑</button>
+              <button class="button-style" onclick="move('down')" title="Mover Abajo">↓</button>
+              <button class="button-style" onclick="resetMandelbrot()" title="Reset">🔄</button>
+          </div>
+      </div>
+
+      <div id="julia-style">
+          <canvas id="julia" width="1525" height="600"></canvas>
+          <div id="controls">
+              <button class="button-style" onclick="zoomJulia(1.5)" title="Zoom In">🔍+</button>
+              <button class="button-style" onclick="zoomJulia(0.67)" title="Zoom Out">🔍-</button>
+              <button class="button-style" onclick="moveJulia('left')" title="Mover Izquierda">←</button>
+              <button class="button-style" onclick="moveJulia('right')" title="Mover Derecha">→</button>
+              <button class="button-style" onclick="moveJulia('up')" title="Mover Arriba">↑</button>
+              <button class="button-style" onclick="moveJulia('down')" title="Mover Abajo">↓</button>
+              <button class="button-style" onclick="resetJulia()" title="Reset">🔄</button>
+          </div>
+      </div>
+  </div>
+    <script type="module" src="/src/main/index.js"></script>
 
   </body>
 </html>
